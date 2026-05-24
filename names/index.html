@@ -270,12 +270,39 @@
   .name-card:nth-child(11) { animation-delay: 0.55s; }
   .name-card:nth-child(12) { animation-delay: 0.60s; }
 
+  .back-link {
+    position: fixed;
+    top: 20px;
+    left: 24px;
+    z-index: 100;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 16px;
+    background: rgba(15, 8, 30, 0.7);
+    backdrop-filter: blur(14px);
+    border: 0.5px solid rgba(160, 100, 255, 0.25);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(241, 235, 249, 0.7);
+    text-decoration: none;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .back-link:hover { color: var(--text); border-color: rgba(160, 100, 255, 0.5); }
+  .back-link svg { opacity: 0.6; }
+
   @media (max-width: 600px) {
     .names-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
+
+<a class="back-link" href="../">
+  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L4 6l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  Ver landing
+</a>
 
 <!-- HERO -->
 <section class="hero">
