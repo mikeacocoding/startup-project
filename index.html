@@ -33,12 +33,11 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { background: var(--bg); color: var(--ink); }
+html, body { background: var(--bg); color: var(--ink); overflow-x: hidden; }
 body {
   font-family: 'DM Sans', system-ui, sans-serif;
   font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
 }
 ::selection { background: var(--violet); color: #fff; }
 
@@ -1392,6 +1391,38 @@ footer {
   .ai-claim { border-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
   .ai-claim:last-child { border-bottom: 0; }
 }
+/* ---------- Names link ---------- */
+.names-link {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  background: rgba(15, 8, 30, 0.7);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(180, 160, 230, 0.18);
+  border-radius: 999px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-2);
+  text-decoration: none;
+  transition: color 0.2s, border-color 0.2s;
+}
+.names-link:hover { color: var(--ink); border-color: rgba(168, 85, 247, 0.5); }
+
+@media (max-width: 760px) {
+  .names-link {
+    top: auto;
+    bottom: 24px;
+    right: 20px;
+  }
+}
+
 @media (max-width: 760px) {
   .showcase { grid-template-columns: 1fr; }
   .sc-diag, .sc-arch { min-height: auto; }
@@ -2179,6 +2210,10 @@ function AndromedaApp() {
 
   return (
     <div className="shell">
+      <a className="names-link" href="./names/">
+        Ver nombres
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4 2l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </a>
       <Starfield />
       <Nav />
       <Hero />
