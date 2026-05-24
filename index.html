@@ -1,0 +1,2198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Andrómeda — Desarrollo web a la velocidad de la luz</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================
+   ANDRÓMEDA — Landing Page
+   Cosmic dark theme, violet accents
+   ============================================ */
+
+:root {
+  --bg: #06030f;
+  --bg-2: #0b0716;
+  --bg-3: #120a22;
+  --ink: #f5f0ff;
+  --ink-2: #c9bfe0;
+  --ink-3: #8a7fa8;
+  --ink-4: #5b536f;
+  --line: rgba(180, 160, 230, 0.10);
+  --line-2: rgba(180, 160, 230, 0.18);
+  --violet: oklch(0.70 0.20 295);
+  --violet-2: oklch(0.62 0.24 300);
+  --violet-deep: oklch(0.45 0.22 295);
+  --violet-soft: oklch(0.85 0.10 295);
+  --glow: 168, 85, 247;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg); color: var(--ink); }
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--violet); color: #fff; }
+
+h1, h2, h3, h4 {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+.mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+/* ---------- Layout ---------- */
+.shell {
+  position: relative;
+  min-height: 100vh;
+  isolation: isolate;
+}
+.wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* ---------- Starfield ---------- */
+.starfield {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.starfield canvas { width: 100%; height: 100%; display: block; }
+
+.cosmic-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+/* ---------- Nav ---------- */
+.nav {
+  position: sticky;
+  top: 16px;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  padding: 0 32px;
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 7px 7px 16px;
+  background: rgba(20, 12, 38, 0.55);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 10px 40px rgba(0, 0, 0, 0.4);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-right: 14px;
+  margin-right: 6px;
+  border-right: 1px solid var(--line-2);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  font-size: 15px;
+}
+.brand-mark {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, var(--violet-soft) 30%, var(--violet) 60%, var(--violet-deep) 100%);
+  box-shadow: 0 0 12px rgba(var(--glow), 0.6), inset 0 0 8px rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+}
+.nav-links { display: flex; gap: 2px; }
+.nav-link {
+  padding: 9px 16px;
+  font-size: 13.5px;
+  color: var(--ink-2);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid transparent;
+}
+.nav-link:hover { color: var(--ink); background: rgba(255, 255, 255, 0.04); }
+.nav-link.active {
+  background: linear-gradient(180deg, var(--violet-2), var(--violet-deep));
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 14px rgba(var(--glow), 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.nav-cta {
+  margin-left: 8px;
+  padding: 9px 18px 9px 18px;
+  background: linear-gradient(180deg, var(--violet-2), var(--violet-deep));
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 18px rgba(var(--glow), 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: transform 0.15s;
+}
+.nav-cta:hover { transform: translateY(-1px); }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  padding: 88px 0 60px;
+  text-align: center;
+  z-index: 2;
+}
+.hero-purple-wash {
+  position: absolute;
+  top: -120px; left: 50%;
+  transform: translateX(-50%);
+  width: 900px; height: 600px;
+  background: radial-gradient(ellipse at center,
+    rgba(168, 85, 247, 0.35) 0%,
+    rgba(120, 60, 200, 0.15) 35%,
+    transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: -1;
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--ink-2);
+  background: rgba(20, 12, 38, 0.4);
+  backdrop-filter: blur(8px);
+  margin-bottom: 40px;
+}
+.eyebrow::before, .eyebrow::after {
+  content: "";
+  width: 18px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--violet));
+}
+.eyebrow::after { background: linear-gradient(90deg, var(--violet), transparent); }
+.eyebrow .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--violet);
+  box-shadow: 0 0 8px rgba(var(--glow), 0.8);
+}
+.hero h1 {
+  font-size: clamp(48px, 7vw, 88px);
+  font-weight: 500;
+  max-width: 980px;
+  margin: 0 auto;
+}
+.hero h1 .gradient {
+  background: linear-gradient(180deg, #d4b8ff 0%, #a855f7 60%, #6b3fc7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-style: italic;
+  font-weight: 400;
+}
+.hero p.lead {
+  margin: 28px auto 0;
+  max-width: 580px;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+.hero-cta-row {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 40px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 26px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn-primary {
+  background: linear-gradient(180deg, var(--violet-2), var(--violet-deep));
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 28px rgba(var(--glow), 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(var(--glow), 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.22); }
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--ink);
+  border-color: var(--line-2);
+}
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.06); border-color: rgba(180, 160, 230, 0.3); }
+
+/* ---------- Hero showcase card ---------- */
+.showcase {
+  margin: 72px auto 0;
+  max-width: 1080px;
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 16px;
+  text-align: left;
+}
+.card {
+  background: linear-gradient(180deg, rgba(28, 18, 52, 0.6), rgba(14, 8, 28, 0.6));
+  border: 1px solid var(--line-2);
+  border-radius: 22px;
+  padding: 22px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* shared head for showcase cards */
+.sc-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+.sc-head > div:not(.sc-head-icon) { flex: 1; min-width: 0; }
+.sc-head-icon {
+  width: 32px; height: 32px;
+  display: grid; place-items: center;
+  border-radius: 10px;
+  background: linear-gradient(180deg, var(--violet-2), var(--violet-deep));
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 0 14px rgba(var(--glow), 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.sc-head-icon.dim {
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  color: var(--violet-soft);
+  box-shadow: none;
+}
+.sc-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  color: var(--ink);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+.sc-subtitle {
+  font-size: 11.5px;
+  color: var(--ink-3);
+  margin-top: 2px;
+  letter-spacing: 0.01em;
+}
+.sc-subtitle.mono { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; }
+.sc-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  background: rgba(80, 220, 180, 0.1);
+  border: 1px solid rgba(80, 220, 180, 0.3);
+  border-radius: 999px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: #6ed7b0;
+  letter-spacing: 0.05em;
+}
+.sc-status-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: #6ed7b0;
+  box-shadow: 0 0 6px rgba(110, 215, 176, 0.8);
+}
+
+/* Diagnóstico (left) */
+.sc-diag {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 480px;
+}
+
+/* Arquitectura (right) */
+.sc-arch {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 480px;
+}
+.arch-modules {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+.arch-mod {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: rgba(10, 6, 22, 0.5);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  transition: border-color 0.2s;
+}
+.arch-mod:hover { border-color: var(--line-2); }
+.arch-mod-icon {
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  display: grid; place-items: center;
+  color: var(--violet-soft);
+  flex-shrink: 0;
+}
+.arch-mod-body { flex: 1; min-width: 0; }
+.arch-mod-name {
+  font-size: 13.5px;
+  color: var(--ink);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+.arch-mod-tech {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  color: var(--ink-3);
+  margin-top: 3px;
+  letter-spacing: 0.01em;
+}
+.arch-ai-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 9px;
+  background: linear-gradient(180deg, rgba(168, 85, 247, 0.25), rgba(80, 40, 160, 0.25));
+  border: 1px solid rgba(168, 85, 247, 0.45);
+  border-radius: 999px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  color: var(--violet-soft);
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+.arch-ai-tag svg { width: 10px; height: 10px; }
+
+.arch-timeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  padding: 14px 4px 4px;
+  position: relative;
+  border-top: 1px dashed var(--line-2);
+  margin-top: 4px;
+}
+.arch-timeline::before {
+  content: "";
+  position: absolute;
+  top: 28px;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--violet), var(--violet-deep), var(--line));
+  opacity: 0.6;
+}
+.tl-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  z-index: 1;
+}
+.tl-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: rgba(168, 85, 247, 0.2);
+  border: 1px solid var(--line-2);
+  margin-top: 6px;
+}
+.tl-step.done .tl-dot {
+  background: var(--violet-soft);
+  border-color: var(--violet-soft);
+  box-shadow: 0 0 8px rgba(var(--glow), 0.6);
+}
+.tl-step.current .tl-dot {
+  background: var(--violet);
+  border-color: var(--violet);
+  box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.18), 0 0 12px rgba(var(--glow), 0.6);
+}
+.tl-label {
+  font-size: 12px;
+  color: var(--ink);
+  font-weight: 500;
+  margin-top: 4px;
+}
+.tl-step:not(.done):not(.current) .tl-label { color: var(--ink-3); }
+.tl-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.02em;
+}
+
+/* sc-flow */
+.sc-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+.sc-step {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 14px;
+  position: relative;
+  padding-bottom: 18px;
+}
+.sc-step:last-child { padding-bottom: 0; }
+.sc-step::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 32px;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg, var(--violet) 0%, var(--line) 100%);
+  opacity: 0.5;
+}
+.sc-step:last-child::before { display: none; }
+
+.sc-step-mark {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: var(--violet-soft);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  z-index: 1;
+  flex-shrink: 0;
+}
+.sc-step-mark.done {
+  background: linear-gradient(180deg, var(--violet-2), var(--violet-deep));
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  box-shadow: 0 0 14px rgba(var(--glow), 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.sc-step-mark.done svg { width: 13px; height: 13px; }
+.sc-step-mark.done path { stroke-width: 2.2; }
+
+.sc-step-body { display: flex; flex-direction: column; gap: 8px; padding-top: 5px; }
+.sc-step-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: 0.005em;
+}
+
+.sc-bubble {
+  padding: 12px 14px;
+  background: rgba(10, 6, 22, 0.6);
+  border: 1px solid var(--line-2);
+  border-radius: 12px;
+  border-top-left-radius: 4px;
+  position: relative;
+}
+.sc-bubble p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink);
+  font-style: italic;
+}
+.sc-bubble-by {
+  display: block;
+  margin-top: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  color: var(--ink-3);
+  letter-spacing: 0.02em;
+}
+
+.sc-process {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  background: rgba(10, 6, 22, 0.6);
+  border: 1px solid var(--line-2);
+  border-radius: 12px;
+}
+.sc-actors {
+  display: flex;
+  align-items: center;
+}
+.sc-actor {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0;
+  border: 2px solid var(--bg);
+  flex-shrink: 0;
+}
+.sc-actor + .sc-actor { margin-left: -8px; }
+.sc-actor.sc-eng {
+  background: linear-gradient(135deg, #3a2860, #1a1030);
+  color: var(--ink);
+  border-color: rgba(20, 12, 38, 1);
+}
+.sc-actor.sc-eng:nth-of-type(2) { background: linear-gradient(135deg, #4a3a78, #2a1a48); }
+.sc-actor.sc-eng:nth-of-type(3) { background: linear-gradient(135deg, #2a3a60, #1a1030); }
+.sc-actor.sc-ai {
+  background: linear-gradient(180deg, var(--violet-2), var(--violet-deep));
+  color: #fff;
+  box-shadow: 0 0 12px rgba(var(--glow), 0.6);
+}
+.sc-actor.sc-ai svg { width: 12px; height: 12px; }
+
+.sc-process-meta { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.sc-process-line {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  color: var(--violet-soft);
+  letter-spacing: 0.02em;
+}
+.sc-process-tasks {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  font-size: 11.5px;
+  color: var(--ink-2);
+}
+.sc-pip {
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--ink-4);
+  margin-right: 5px;
+  vertical-align: 0;
+}
+.sc-pip.done { background: #6ed7b0; box-shadow: 0 0 6px rgba(110, 215, 176, 0.6); }
+.sc-pip.current {
+  background: var(--violet);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+  animation: sc-pulse 1.6s ease-in-out infinite;
+}
+@keyframes sc-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2); }
+  50% { box-shadow: 0 0 0 6px rgba(168, 85, 247, 0); }
+}
+
+.sc-proposal {
+  padding: 14px;
+  background:
+    radial-gradient(ellipse at top right, rgba(168, 85, 247, 0.12), transparent 60%),
+    rgba(10, 6, 22, 0.7);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+.sc-proposal-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--ink);
+}
+.sc-proposal-row svg {
+  width: 11px; height: 11px;
+  color: var(--violet-soft);
+  flex-shrink: 0;
+}
+.sc-proposal-row path { stroke-width: 2.2; }
+.sc-proposal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-size: 12px;
+  color: var(--ink-2);
+}
+.sc-proposal-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  color: var(--violet-soft);
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  border-radius: 999px;
+}
+
+.field-chev {
+  width: 14px; height: 14px;
+  color: var(--ink-3);
+}
+.btn-gen {
+  margin-top: 4px;
+  padding: 13px;
+  background: linear-gradient(180deg, rgba(168, 85, 247, 0.25), rgba(80, 40, 160, 0.25));
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  border-radius: 12px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-gen:hover { background: linear-gradient(180deg, rgba(168, 85, 247, 0.4), rgba(80, 40, 160, 0.4)); border-color: rgba(168, 85, 247, 0.55); }
+
+/* pills under showcase */
+.feature-pills {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  padding: 6px 8px;
+  margin-top: 36px;
+  background: rgba(20, 12, 38, 0.4);
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+  font-size: 13px;
+  color: var(--ink-2);
+}
+.feature-pills .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+}
+.feature-pills .sep {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--violet);
+  box-shadow: 0 0 6px rgba(var(--glow), 0.6);
+}
+
+/* ---------- Section heading ---------- */
+.section {
+  position: relative;
+  padding: 120px 0 40px;
+  z-index: 2;
+}
+.section-eyebrow-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+.section h2 {
+  font-size: clamp(36px, 5vw, 60px);
+  text-align: center;
+  max-width: 880px;
+  margin: 0 auto;
+}
+.section h2 .gradient {
+  background: linear-gradient(180deg, #d4b8ff 0%, #a855f7 60%, #6b3fc7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-style: italic;
+  font-weight: 400;
+}
+.section-sub {
+  text-align: center;
+  color: var(--ink-2);
+  font-size: 17px;
+  line-height: 1.55;
+  max-width: 580px;
+  margin: 20px auto 0;
+}
+
+/* ---------- Services grid ---------- */
+.services-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 14px;
+  margin-top: 56px;
+}
+.svc-card {
+  position: relative;
+  overflow: hidden;
+  padding: 26px;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.svc-card.large { grid-row: span 2; min-height: 654px; }
+.svc-card .tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 999px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--violet-soft);
+  letter-spacing: 0.05em;
+  width: max-content;
+}
+.svc-card h3 {
+  font-size: 28px;
+  margin-top: 14px;
+  line-height: 1.1;
+}
+.svc-card p {
+  color: var(--ink-2);
+  font-size: 14.5px;
+  line-height: 1.5;
+  margin-top: 12px;
+}
+.svc-art {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  margin: 20px -6px;
+  min-height: 160px;
+  position: relative;
+}
+.orbit {
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  border: 1px solid var(--line-2);
+  display: grid;
+  place-items: center;
+  position: relative;
+  animation: spin 24s linear infinite;
+}
+.orbit::before, .orbit::after {
+  content: "";
+  position: absolute; inset: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+}
+.orbit::after { inset: 60px; border-color: var(--line-2); }
+.orbit .core {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, var(--violet-soft) 25%, var(--violet) 55%, var(--violet-deep) 100%);
+  box-shadow: 0 0 40px rgba(var(--glow), 0.7);
+  animation: spin 24s linear infinite reverse;
+}
+.orbit .planet {
+  position: absolute;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--violet-soft);
+  box-shadow: 0 0 10px rgba(var(--glow), 0.8);
+}
+.orbit .p1 { top: -7px; left: 50%; }
+.orbit .p2 { top: 50%; right: -7px; background: #f5b6e0; box-shadow: 0 0 10px rgba(245, 182, 224, 0.7); }
+.orbit .p3 { bottom: -7px; left: 30%; background: #a5e1c0; box-shadow: 0 0 10px rgba(165, 225, 192, 0.7); }
+@keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+
+.svc-art .blueprint {
+  width: 100%; height: 180px;
+  background:
+    linear-gradient(0deg, transparent 0, transparent 19px, rgba(168, 85, 247, 0.1) 20px),
+    linear-gradient(90deg, transparent 0, transparent 19px, rgba(168, 85, 247, 0.1) 20px);
+  background-size: 20px 20px;
+  border: 1px solid var(--line-2);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.blueprint .node {
+  position: absolute;
+  padding: 6px 10px;
+  background: rgba(20, 12, 38, 0.9);
+  border: 1px solid var(--line-2);
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--violet-soft);
+}
+.blueprint .node.n1 { top: 16px; left: 16px; }
+.blueprint .node.n2 { top: 16px; right: 16px; }
+.blueprint .node.n3 { bottom: 16px; left: 50%; transform: translateX(-50%); color: #a5e1c0; }
+.blueprint .line {
+  position: absolute;
+  background: linear-gradient(90deg, transparent, var(--violet), transparent);
+  height: 1px;
+}
+.blueprint .l1 { top: 30px; left: 80px; right: 80px; }
+.blueprint .l2 { bottom: 50px; left: 30%; width: 30%; }
+
+.tech-pulse {
+  display: flex;
+  align-items: end;
+  gap: 4px;
+  height: 80px;
+  padding: 12px 0;
+}
+.tech-pulse .bar2 {
+  flex: 1;
+  background: linear-gradient(180deg, var(--violet-soft), var(--violet-deep));
+  border-radius: 3px;
+  opacity: 0.85;
+  box-shadow: 0 0 8px rgba(var(--glow), 0.3);
+}
+
+.support-art {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 220px;
+}
+.support-uptime {
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  gap: 3px;
+  height: 36px;
+}
+.uptime-cell {
+  border-radius: 2px;
+  background: rgba(110, 215, 176, 0.25);
+  box-shadow: inset 0 0 0 1px rgba(110, 215, 176, 0.45);
+}
+.uptime-cell.ok {
+  background: linear-gradient(180deg, #6ed7b0, #3a9d7a);
+  box-shadow: 0 0 6px rgba(110, 215, 176, 0.4);
+}
+.uptime-cell.pending {
+  background: rgba(168, 85, 247, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(168, 85, 247, 0.4);
+}
+.support-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(10, 6, 22, 0.6);
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+}
+.support-pulse {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #6ed7b0;
+  box-shadow: 0 0 8px rgba(110, 215, 176, 0.8);
+  animation: sc-pulse-green 1.8s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes sc-pulse-green {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(110, 215, 176, 0.5), 0 0 8px rgba(110, 215, 176, 0.8); }
+  50% { box-shadow: 0 0 0 6px rgba(110, 215, 176, 0), 0 0 8px rgba(110, 215, 176, 0.8); }
+}
+.support-status-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  color: var(--ink-2);
+  letter-spacing: 0.04em;
+}
+
+/* ---------- Tech stack ---------- */
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  margin-top: 56px;
+}
+.tech-cell {
+  padding: 22px 16px;
+  background: linear-gradient(180deg, rgba(28, 18, 52, 0.4), rgba(14, 8, 28, 0.4));
+  border: 1px solid var(--line-2);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s;
+  cursor: default;
+}
+.tech-cell:hover {
+  border-color: rgba(168, 85, 247, 0.35);
+  background: linear-gradient(180deg, rgba(40, 25, 75, 0.5), rgba(20, 12, 40, 0.5));
+  transform: translateY(-2px);
+}
+.tech-cell .icon-box {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  display: grid; place-items: center;
+  color: var(--violet-soft);
+}
+.tech-cell .name {
+  font-size: 12.5px;
+  color: var(--ink);
+  font-weight: 500;
+}
+.tech-cell .role {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  color: var(--ink-3);
+  letter-spacing: 0.05em;
+}
+
+/* ---------- Process ---------- */
+.process {
+  margin-top: 56px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  position: relative;
+}
+.process::before {
+  content: "";
+  position: absolute;
+  top: 40px;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--violet), transparent);
+  opacity: 0.5;
+}
+.step {
+  position: relative;
+  padding: 28px 22px;
+  background: linear-gradient(180deg, rgba(28, 18, 52, 0.5), rgba(14, 8, 28, 0.5));
+  border: 1px solid var(--line-2);
+  border-radius: 18px;
+  z-index: 1;
+}
+.step-num {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--violet-2), var(--violet-deep));
+  display: grid; place-items: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 14px rgba(var(--glow), 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.step h4 {
+  font-size: 18px;
+  font-weight: 500;
+}
+.step p {
+  margin-top: 10px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+/* ---------- AI section ---------- */
+.ai-grid {
+  margin-top: 56px;
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 18px;
+  align-items: stretch;
+}
+.ai-visual {
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  min-height: 460px;
+  display: flex;
+  flex-direction: column;
+}
+.ai-visual-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.dot-row { display: flex; gap: 6px; }
+.dot-row i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.ai-file { letter-spacing: 0.02em; }
+.ai-code {
+  flex: 1;
+  padding: 18px 22px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.85;
+  position: relative;
+}
+.ai-code .line {
+  display: block;
+  color: var(--ink);
+  white-space: pre;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ai-code .line.ghost { color: var(--ink-4); }
+.ai-code .ln {
+  display: inline-block;
+  width: 24px;
+  margin-right: 16px;
+  text-align: right;
+  color: var(--ink-4);
+  user-select: none;
+}
+.ai-code .k { color: #c39cff; }
+.ai-code .fn { color: #a5e1c0; }
+.ai-code .t { color: #f5b6e0; }
+.ai-code .c { color: var(--ink-4); }
+.ai-code .n { color: #ffd089; }
+
+.ai-suggest {
+  position: absolute;
+  bottom: 20px;
+  left: 22px;
+  right: 22px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: rgba(40, 22, 78, 0.85);
+  border: 1px solid rgba(168, 85, 247, 0.45);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(var(--glow), 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.ai-suggest .ai-icon {
+  width: 28px; height: 28px;
+  display: grid; place-items: center;
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--violet-2), var(--violet-deep));
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(var(--glow), 0.6);
+}
+.ai-suggest > div { flex: 1; min-width: 0; }
+.ai-suggest-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11.5px;
+  color: var(--violet-soft);
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+.ai-suggest-body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--ink);
+  margin-top: 2px;
+}
+.ai-suggest-btn {
+  padding: 7px 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--line-2);
+  border-radius: 8px;
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.ai-suggest-btn:hover { background: rgba(255, 255, 255, 0.14); }
+
+.ai-bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ai-bullet {
+  display: flex;
+  align-items: start;
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  transition: all 0.2s;
+}
+.ai-bullet:hover {
+  background: linear-gradient(180deg, rgba(28, 18, 52, 0.5), rgba(14, 8, 28, 0.5));
+  border-color: var(--line-2);
+}
+.ai-bullet-icon {
+  flex-shrink: 0;
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  display: grid; place-items: center;
+  color: var(--violet-soft);
+}
+.ai-bullet-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.ai-bullet-desc {
+  margin-top: 6px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.ai-claims {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  padding: 24px;
+  background: linear-gradient(180deg, rgba(28, 18, 52, 0.4), rgba(14, 8, 28, 0.4));
+  border: 1px solid var(--line-2);
+  border-radius: 18px;
+}
+.ai-claim {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 16px;
+  border-right: 1px solid var(--line);
+}
+.ai-claim:last-child { border-right: 0; }
+.ai-claim-k {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--violet-soft);
+}
+.ai-claim-v {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  line-height: 1.3;
+  color: var(--ink);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Contact form ---------- */
+.contact-card {
+  margin-top: 56px;
+  padding: 36px 40px;
+}
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.form-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.form-label .req { color: var(--violet-soft); }
+.form-field input,
+.form-field textarea,
+.form-field select {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(10, 6, 22, 0.6);
+  border: 1px solid var(--line-2);
+  border-radius: 12px;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14.5px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+  color: var(--ink-4);
+}
+.form-field input:focus,
+.form-field textarea:focus,
+.form-field select:focus {
+  border-color: rgba(168, 85, 247, 0.55);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+  background: rgba(15, 9, 30, 0.8);
+}
+.form-field textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: 'DM Sans', sans-serif;
+}
+.form-field .err {
+  border-color: rgba(247, 106, 130, 0.6);
+  box-shadow: 0 0 0 3px rgba(247, 106, 130, 0.1);
+}
+.select-wrap { position: relative; }
+.select-wrap select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 40px;
+  cursor: pointer;
+}
+.select-wrap .select-chev {
+  position: absolute;
+  right: 14px; top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--ink-3);
+}
+.contact-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-top: 4px;
+}
+.contact-disclaimer {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  max-width: 420px;
+  line-height: 1.45;
+}
+.contact-footer .btn { white-space: nowrap; flex-shrink: 0; }
+
+.contact-success {
+  text-align: center;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.contact-success-mark {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--violet-2), var(--violet-deep));
+  display: grid; place-items: center;
+  color: #fff;
+  box-shadow: 0 10px 40px rgba(var(--glow), 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.contact-success-mark svg { width: 22px; height: 22px; }
+.contact-success-mark path { stroke-width: 2; }
+.contact-success h3 {
+  font-size: 30px;
+  font-weight: 500;
+}
+.contact-success p {
+  font-size: 15.5px;
+  color: var(--ink-2);
+  max-width: 480px;
+  line-height: 1.5;
+}
+
+/* ---------- Footer ---------- */
+footer {
+  margin-top: 120px;
+  padding: 88px 0 48px;
+  border-top: 1px solid var(--line);
+  position: relative;
+  z-index: 2;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 56px;
+}
+.footer-brand {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  display: flex; align-items: center; gap: 12px;
+}
+.footer-desc { margin-top: 14px; font-size: 13.5px; color: var(--ink-2); line-height: 1.5; max-width: 280px; }
+.foot-col h5 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.foot-col a {
+  display: block;
+  color: var(--ink-2);
+  font-size: 13.5px;
+  text-decoration: none;
+  margin-bottom: 10px;
+  transition: color 0.15s;
+}
+.foot-col a:hover { color: var(--ink); }
+.footer-bottom {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+  color: var(--ink-3);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px) {
+  .services-grid { grid-template-columns: 1fr 1fr; }
+  .svc-card.large { grid-row: span 1; min-height: 320px; }
+  .tech-grid { grid-template-columns: repeat(4, 1fr); }
+  .process { grid-template-columns: repeat(2, 1fr); }
+  .ai-grid { grid-template-columns: 1fr; }
+  .ai-claims { grid-template-columns: 1fr; }
+  .ai-claim { border-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
+  .ai-claim:last-child { border-bottom: 0; }
+}
+@media (max-width: 760px) {
+  .showcase { grid-template-columns: 1fr; }
+  .sc-diag, .sc-arch { min-height: auto; }
+  .services-grid, .tech-grid, .process, .footer-grid {
+    grid-template-columns: 1fr;
+  }
+  .form-row { grid-template-columns: 1fr; }
+  .contact-card { padding: 24px 22px; }
+  .contact-footer { flex-direction: column; align-items: stretch; }
+  .nav-links { display: none; }
+  .wrap { padding: 0 20px; }
+}
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+function smoothScrollTo(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const y = el.getBoundingClientRect().top + window.scrollY - 24;
+  window.scrollTo({ top: y, behavior: 'smooth' });
+}
+
+const Icon = {
+  arrow: (p) =>
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" {...p}>
+      <path d="M3 7h8m0 0L7.5 3.5M11 7l-3.5 3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>,
+
+  chev: (p) =>
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" {...p}>
+      <path d="M4 5l3 3 3-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>,
+
+  sparkle: (p) =>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" {...p}>
+      <path d="M8 1l1.3 4.7L14 7l-4.7 1.3L8 13l-1.3-4.7L2 7l4.7-1.3L8 1z" fill="currentColor" />
+    </svg>,
+
+  check: (p) =>
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" {...p}>
+      <path d="M2 5l2 2 4-4.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>,
+
+  code: (p) =>
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" {...p}>
+      <path d="M7 6l-4 4 4 4M13 6l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>,
+
+  layers: (p) =>
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" {...p}>
+      <path d="M10 3l7 4-7 4-7-4 7-4zM3 11l7 4 7-4M3 14l7 4 7-4" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+    </svg>,
+
+  bolt: (p) =>
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" {...p}>
+      <path d="M11 2L4 11h5l-1 7 7-9h-5l1-7z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+    </svg>,
+
+  cube: (p) =>
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" {...p}>
+      <path d="M10 2.5l6.5 3.5v8L10 17.5 3.5 14V6L10 2.5zM10 10l6.5-3.5M10 10v7.5M10 10L3.5 6" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+    </svg>,
+
+  shield: (p) =>
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" {...p}>
+      <path d="M10 2l6 2.5v5.5c0 4-3 6.5-6 7.5-3-1-6-3.5-6-7.5V4.5L10 2z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+    </svg>,
+
+  zap: (p) =>
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" {...p}>
+      <path d="M8 1L3 8h4l-1 5 5-7H7l1-5z" fill="currentColor" />
+    </svg>,
+
+  planet: (p) =>
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" {...p}>
+      <circle cx="7" cy="7" r="4" stroke="currentColor" strokeWidth="1.4" />
+      <ellipse cx="7" cy="7" rx="6.5" ry="2" stroke="currentColor" strokeWidth="1.4" transform="rotate(-20 7 7)" />
+    </svg>,
+
+  satellite: (p) =>
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" {...p}>
+      <rect x="5" y="5" width="4" height="4" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M5 5L2 2M9 9l3 3M9 5l3-3M5 9l-3 3" stroke="currentColor" strokeWidth="1.4" />
+    </svg>
+};
+
+// ───────── Starfield ─────────
+function Starfield() {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const canvas = ref.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    let w, h, stars, raf;
+
+    function resize() {
+      w = canvas.clientWidth;
+      h = canvas.clientHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      ctx.scale(dpr, dpr);
+      const count = Math.floor(w * h / 9000);
+      stars = Array.from({ length: count }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.3 + 0.2,
+        a: Math.random() * 0.7 + 0.1,
+        twinkleSpeed: Math.random() * 0.015 + 0.003,
+        phase: Math.random() * Math.PI * 2,
+        drift: Math.random() * 0.04 + 0.01
+      }));
+    }
+
+    let t = 0;
+    function draw() {
+      t += 1;
+      ctx.clearRect(0, 0, w, h);
+      for (const s of stars) {
+        const alpha = s.a * (0.6 + 0.4 * Math.sin(t * s.twinkleSpeed + s.phase));
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(220, 200, 255, ${alpha})`;
+        ctx.fill();
+        if (s.r > 1.1) {
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r * 3, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(168, 85, 247, ${alpha * 0.15})`;
+          ctx.fill();
+        }
+        s.y += s.drift;
+        if (s.y > h) { s.y = 0; s.x = Math.random() * w; }
+      }
+      raf = requestAnimationFrame(draw);
+    }
+
+    resize();
+    draw();
+    window.addEventListener('resize', resize);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener('resize', resize); };
+  }, []);
+
+  return (
+    <div className="starfield">
+      <canvas ref={ref} />
+      <div className="cosmic-glow" style={{ top: '5%', left: '15%', width: 500, height: 500, background: 'radial-gradient(circle, rgba(168,85,247,0.25), transparent 70%)' }} />
+      <div className="cosmic-glow" style={{ top: '40%', right: '0%', width: 600, height: 600, background: 'radial-gradient(circle, rgba(120,60,200,0.18), transparent 70%)' }} />
+      <div className="cosmic-glow" style={{ top: '80%', left: '40%', width: 700, height: 700, background: 'radial-gradient(circle, rgba(80,40,160,0.20), transparent 70%)' }} />
+    </div>
+  );
+}
+
+// ───────── Nav ─────────
+function Nav() {
+  const [active, setActive] = useState('Servicios');
+  const items = [
+    { label: 'Servicios', id: 'servicios' },
+    { label: 'IA', id: 'ia' },
+    { label: 'Tecnología', id: 'tecnologia' },
+    { label: 'Proceso', id: 'proceso' }
+  ];
+
+  return (
+    <nav className="nav">
+      <div className="nav-inner">
+        <div className="brand">
+          <div className="brand-mark" />
+          Andrómeda
+        </div>
+        <div className="nav-links">
+          {items.map((item) =>
+            <a key={item.id}
+              className={`nav-link ${active === item.label ? 'active' : ''}`}
+              onClick={(e) => { e.preventDefault(); setActive(item.label); smoothScrollTo(item.id); }}>
+              {item.label}
+            </a>
+          )}
+        </div>
+        <button className="nav-cta" onClick={() => smoothScrollTo('contacto')}>
+          Hablemos <Icon.arrow />
+        </button>
+      </div>
+    </nav>
+  );
+}
+
+// ───────── Hero ─────────
+function Hero() {
+  return (
+    <section className="hero wrap">
+      <div className="hero-purple-wash" />
+      <div className="eyebrow"><span className="dot" /> Desarrollo a la medida · Consultoría · IA-first</div>
+      <h1>
+        Software a la medida,<br />
+        construido a altísima velocidad con toda la potencia de la <span className="gradient">IA.</span>
+      </h1>
+      <p className="lead">
+        Diseñamos y desarrollamos plataformas, aplicaciones e integraciones que se adaptan a tu negocio. La IA acelera cada etapa del proceso para entregar más rápido y con mayor calidad.
+      </p>
+      <div className="hero-cta-row">
+        <button className="btn btn-primary" onClick={() => smoothScrollTo('contacto')}>Iniciar proyecto <Icon.arrow /></button>
+        <a href="#servicios" className="btn btn-ghost" onClick={(e) => { e.preventDefault(); smoothScrollTo('servicios'); }}>Ver servicios <Icon.arrow /></a>
+      </div>
+
+      <Showcase />
+
+      <div className="feature-pills">
+        <span className="pill"><Icon.zap /> Entregas continuas</span>
+        <span className="sep" />
+        <span className="pill"><Icon.planet /> A medida, no plantilla</span>
+        <span className="sep" />
+        <span className="pill"><Icon.satellite /> Tú eres dueño del código</span>
+      </div>
+    </section>
+  );
+}
+
+function Showcase() {
+  return (
+    <div className="showcase">
+      {/* Left: Proceso de propuesta */}
+      <div className="card sc-diag">
+        <div className="sc-head">
+          <span className="sc-head-icon"><Icon.sparkle /></span>
+          <div>
+            <div className="sc-title">De tu reto a la propuesta</div>
+            <div className="sc-subtitle">Sin formularios eternos · Sin demos engañosas</div>
+          </div>
+        </div>
+
+        <div className="sc-flow">
+          <div className="sc-step">
+            <div className="sc-step-mark"><span>01</span></div>
+            <div className="sc-step-body">
+              <div className="sc-step-title">Cuéntanos tu problema</div>
+              <div className="sc-bubble">
+                <p>"Operamos con un ERP genérico que ya no integra bien con nuestros canales digitales. Necesitamos un portal para clientes corporativos."</p>
+                <span className="sc-bubble-by">— Director de tecnología</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="sc-step">
+            <div className="sc-step-mark"><span>02</span></div>
+            <div className="sc-step-body">
+              <div className="sc-step-title">Procesamos con el equipo, asistidos por IA</div>
+              <div className="sc-process">
+                <div className="sc-actors">
+                  <span className="sc-actor sc-eng">JD</span>
+                  <span className="sc-actor sc-eng">MR</span>
+                  <span className="sc-actor sc-eng">AL</span>
+                  <span className="sc-actor sc-ai"><Icon.sparkle /></span>
+                </div>
+                <div className="sc-process-meta">
+                  <div className="sc-process-line">Ingenieros + IA como apoyo</div>
+                  <div className="sc-process-tasks">
+                    <span className="sc-pip done" /> Análisis del reto
+                    <span className="sc-pip done" /> Arquitectura
+                    <span className="sc-pip current" /> Estimación
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="sc-step">
+            <div className="sc-step-mark done"><Icon.check /></div>
+            <div className="sc-step-body">
+              <div className="sc-step-title">Te enviamos una propuesta</div>
+              <div className="sc-proposal">
+                <div className="sc-proposal-row"><Icon.check /> Alcance funcional y técnico</div>
+                <div className="sc-proposal-row"><Icon.check /> Equipo, perfiles y dedicación</div>
+                <div className="sc-proposal-row"><Icon.check /> Cronograma y entregables</div>
+                <div className="sc-proposal-row"><Icon.check /> Inversión clara, sin sorpresas</div>
+                <div className="sc-proposal-footer">
+                  <span>Lo más pronto posible</span>
+                  <span className="sc-proposal-tag">PROPUESTA · v1</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Right: Arquitectura propuesta */}
+      <div className="card sc-arch">
+        <div className="sc-head">
+          <span className="sc-head-icon dim"><Icon.cube /></span>
+          <div>
+            <div className="sc-title">Arquitectura propuesta</div>
+            <div className="sc-subtitle mono">// diseñada por arquitectos · acelerada con IA</div>
+          </div>
+          <span className="sc-status">
+            <i className="sc-status-dot" /> Activo
+          </span>
+        </div>
+
+        <div className="arch-modules">
+          <div className="arch-mod">
+            <div className="arch-mod-icon"><Icon.layers /></div>
+            <div className="arch-mod-body">
+              <div className="arch-mod-name">Frontend · Portal cliente</div>
+              <div className="arch-mod-tech">Next.js · React · TypeScript</div>
+            </div>
+            <span className="arch-ai-tag"><Icon.sparkle /> Acelerado</span>
+          </div>
+          <div className="arch-mod">
+            <div className="arch-mod-icon"><Icon.code /></div>
+            <div className="arch-mod-body">
+              <div className="arch-mod-name">API & microservicios</div>
+              <div className="arch-mod-tech">Node.js · .NET · GraphQL</div>
+            </div>
+            <span className="arch-ai-tag"><Icon.sparkle /> Acelerado</span>
+          </div>
+          <div className="arch-mod">
+            <div className="arch-mod-icon"><Icon.cube /></div>
+            <div className="arch-mod-body">
+              <div className="arch-mod-name">Datos & analítica</div>
+              <div className="arch-mod-tech">PostgreSQL · Redis · BigQuery</div>
+            </div>
+          </div>
+          <div className="arch-mod">
+            <div className="arch-mod-icon"><Icon.shield /></div>
+            <div className="arch-mod-body">
+              <div className="arch-mod-name">Integraciones empresariales</div>
+              <div className="arch-mod-tech">SAP · Salesforce · OAuth2</div>
+            </div>
+            <span className="arch-ai-tag"><Icon.sparkle /> Acelerado</span>
+          </div>
+        </div>
+
+        <div className="arch-timeline">
+          <div className="tl-step done">
+            <div className="tl-dot" />
+            <div className="tl-label">Discovery</div>
+            <div className="tl-time">fase 1</div>
+          </div>
+          <div className="tl-step current">
+            <div className="tl-dot" />
+            <div className="tl-label">MVP</div>
+            <div className="tl-time">fase 2</div>
+          </div>
+          <div className="tl-step">
+            <div className="tl-dot" />
+            <div className="tl-label">Producción</div>
+            <div className="tl-time">fase 3</div>
+          </div>
+          <div className="tl-step">
+            <div className="tl-dot" />
+            <div className="tl-label">Evolución</div>
+            <div className="tl-time">continua</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ───────── Services ─────────
+function Services() {
+  return (
+    <section className="section wrap" id="servicios">
+      <div className="section-eyebrow-row">
+        <div className="eyebrow">— Servicios —</div>
+      </div>
+      <h2>
+        Servicios diseñados<br />
+        para tu <span className="gradient">operación.</span>
+      </h2>
+      <p className="section-sub">
+        Cuatro líneas de trabajo que cubren desde la idea hasta la operación continua del software a la medida.
+      </p>
+
+      <div className="services-grid">
+        <div className="card svc-card large">
+          <div>
+            <span className="tag"><Icon.zap /> CORE_SERVICE</span>
+            <h3>Desarrollo<br />a la medida.</h3>
+            <p>
+              Aplicaciones web, portales, SaaS y APIs construidos desde cero, alineados a tus procesos, tu industria y tus integraciones. Sin licencias rígidas ni soluciones genéricas que se vuelven un freno.
+            </p>
+          </div>
+          <div className="svc-art">
+            <div className="orbit">
+              <div className="core" />
+              <div className="planet p1" />
+              <div className="planet p2" />
+              <div className="planet p3" />
+            </div>
+          </div>
+          <div>
+            <p style={{ marginTop: 0 }}>
+              <strong style={{ color: 'var(--ink)' }}>Incluye:</strong> discovery, diseño UX/UI, arquitectura, frontend, backend, infraestructura cloud, QA automatizado, CI/CD y documentación.
+            </p>
+          </div>
+        </div>
+
+        <div className="card svc-card">
+          <div>
+            <span className="tag"><Icon.satellite /> ADVISORY</span>
+            <h3>Consultoría &<br />arquitectura.</h3>
+            <p>
+              Diagnóstico técnico, decisiones de stack y diseño de arquitecturas modernas (microservicios, cloud, serverless). Ideal cuando necesitas dirección antes de escribir código.
+            </p>
+          </div>
+          <div className="svc-art">
+            <div className="blueprint">
+              <div className="node n1">/* analizar */</div>
+              <div className="node n2">/* decidir */</div>
+              <div className="node n3">→ recomendación</div>
+              <div className="line l1" />
+              <div className="line l2" />
+            </div>
+          </div>
+        </div>
+
+        <div className="card svc-card">
+          <div>
+            <span className="tag"><Icon.planet /> INTEGRACIÓN</span>
+            <h3>Modernización<br />& integraciones.</h3>
+            <p>
+              Llevamos sistemas legacy a arquitecturas actuales y los conectamos con tus plataformas empresariales: SAP, Salesforce, ERPs, core financiero y APIs propias.
+            </p>
+          </div>
+          <div className="svc-art">
+            <div className="tech-pulse">
+              {[20, 35, 28, 48, 40, 60, 52, 70, 64, 82, 75, 90].map((v, i) =>
+                <div key={i} className="bar2" style={{ height: `${v}%` }} />
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="card svc-card">
+          <div>
+            <span className="tag"><Icon.shield /> SOPORTE</span>
+            <h3>Soporte sobre<br />nuestras apps.</h3>
+            <p>
+              Una vez en producción, nos quedamos. Damos monitoreo, correcciones, evolución funcional y atención de incidentes a las plataformas que construimos contigo.
+            </p>
+          </div>
+          <div className="svc-art">
+            <div className="support-art">
+              <div className="support-uptime">
+                {Array.from({ length: 24 }).map((_, i) => (
+                  <span key={i} className={`uptime-cell ${i >= 21 ? 'pending' : 'ok'}`} />
+                ))}
+              </div>
+              <div className="support-status">
+                <span className="support-pulse" />
+                <span className="support-status-label">Sistemas operando · 24/7</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ───────── AI-powered development ─────────
+const AI_BULLETS = [
+  { t: 'Diseño potenciado por IA', d: 'UX/UI iterado con apoyo de IA para validar propuestas y generar variantes antes de comprometernos a una solución.' },
+  { t: 'Arquitectura asistida', d: 'Decisiones de stack, trade-offs y benchmarks contrastados con IA. La definición final siempre la valida un arquitecto humano.' },
+  { t: 'Código acelerado por IA', d: 'Nuestros ingenieros usan IA para tareas repetitivas, refactors y generación de tests, sin renunciar al criterio técnico.' },
+  { t: 'Documentación y QA continuos', d: 'Tests, documentación y revisiones de calidad se generan en paralelo al desarrollo, no como un esfuerzo posterior.' }
+];
+
+function AIBoost() {
+  return (
+    <section className="section wrap" id="ia">
+      <div className="section-eyebrow-row">
+        <div className="eyebrow">— Desarrollo aumentado por IA —</div>
+      </div>
+      <h2>
+        Velocidad y calidad,<br />
+        <span className="gradient">amplificadas por IA.</span>
+      </h2>
+      <p className="section-sub">
+        Aplicamos IA en cada etapa del proceso, desde el diseño y la arquitectura hasta el código. El equipo siempre toma las decisiones finales: la IA acelera, no decide.
+      </p>
+
+      <div className="ai-grid">
+        <div className="card ai-visual">
+          <div className="ai-visual-head">
+            <span className="dot-row">
+              <i style={{ background: '#ff5f57' }} /><i style={{ background: '#febc2e' }} /><i style={{ background: '#28c840' }} />
+            </span>
+            <span className="ai-file">main.tsx — andromeda</span>
+          </div>
+          <div className="ai-code">
+            <div className="line"><span className="ln">12</span><span className="c">// Generar endpoint con validación</span></div>
+            <div className="line"><span className="ln">13</span><span className="k">export async function</span> <span className="fn">createUser</span>(input: <span className="t">CreateUserInput</span>) {'{'}</div>
+            <div className="line"><span className="ln">14</span>{'  '}<span className="k">const</span> parsed = <span className="t">schema</span>.parse(input);</div>
+            <div className="line"><span className="ln">15</span>{'  '}<span className="k">const</span> user = <span className="k">await</span> db.<span className="fn">insert</span>(users)</div>
+            <div className="line"><span className="ln">16</span>{'    '}.values(parsed).returning();</div>
+            <div className="line"><span className="ln">17</span>{'  '}<span className="k">return</span> user[<span className="n">0</span>];</div>
+            <div className="line"><span className="ln">18</span>{'}'}</div>
+            <div className="line ghost"><span className="ln">19</span><span className="c">// + tests · + docs · + types</span></div>
+            <div className="ai-suggest">
+              <span className="ai-icon"><Icon.sparkle /></span>
+              <div>
+                <div className="ai-suggest-title">Análisis con IA</div>
+                <div className="ai-suggest-body">3 tests críticos faltan en este módulo. El equipo los revisa antes del merge.</div>
+              </div>
+              <button className="ai-suggest-btn">Revisar</button>
+            </div>
+          </div>
+        </div>
+
+        <div className="ai-bullets">
+          {AI_BULLETS.map((b) =>
+            <div key={b.t} className="ai-bullet">
+              <div className="ai-bullet-icon"><Icon.sparkle /></div>
+              <div>
+                <div className="ai-bullet-title">{b.t}</div>
+                <div className="ai-bullet-desc">{b.d}</div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="ai-claims">
+        <div className="ai-claim">
+          <div className="ai-claim-k">Velocidad</div>
+          <div className="ai-claim-v">Ciclos de iteración más cortos en cada entrega.</div>
+        </div>
+        <div className="ai-claim">
+          <div className="ai-claim-k">Calidad</div>
+          <div className="ai-claim-v">Menos defectos gracias a revisión continua asistida.</div>
+        </div>
+        <div className="ai-claim">
+          <div className="ai-claim-k">Trazabilidad</div>
+          <div className="ai-claim-v">Documentación y tests viven junto al código, siempre.</div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ───────── Tech Stack ─────────
+const TECH = [
+  { name: 'Next.js 15', role: 'framework', icon: <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="9" stroke="currentColor" strokeWidth="1.4" /><path d="M7 7v8M7 7l8 8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></svg> },
+  { name: 'React 19', role: 'ui', icon: <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="1.5" fill="currentColor" /><ellipse cx="11" cy="11" rx="9" ry="3.5" stroke="currentColor" strokeWidth="1.2" /><ellipse cx="11" cy="11" rx="9" ry="3.5" stroke="currentColor" strokeWidth="1.2" transform="rotate(60 11 11)" /><ellipse cx="11" cy="11" rx="9" ry="3.5" stroke="currentColor" strokeWidth="1.2" transform="rotate(120 11 11)" /></svg> },
+  { name: 'TypeScript', role: 'lang', icon: <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="2" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.4" /><path d="M7 11h5M9.5 11v6M13 13c0 2 4 1.5 4 0s-4-1-4-2.5 3-1.5 3.5-0.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" /></svg> },
+  { name: 'Tailwind v4', role: 'css', icon: <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 12c2-6 6-6 8-3s4 3 8-3M3 18c2-6 6-6 8-3s4 3 8-3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></svg> },
+  { name: 'Astro', role: 'static', icon: <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L4 18l7-4 7 4-7-16z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" /></svg> },
+  { name: 'Node.js', role: 'runtime', icon: <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 1.5L19.5 6v10L11 20.5 2.5 16V6L11 1.5z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" /></svg> },
+  { name: 'tRPC', role: 'api', icon: <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="2" width="18" height="18" rx="3" stroke="currentColor" strokeWidth="1.4" /><path d="M7 11h8M7 11l3-3M7 11l3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg> },
+  { name: 'PostgreSQL', role: 'db', icon: <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><ellipse cx="11" cy="5" rx="7" ry="2.5" stroke="currentColor" strokeWidth="1.4" /><path d="M4 5v12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5V5M4 11c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5" stroke="currentColor" strokeWidth="1.4" /></svg> },
+  { name: 'Drizzle ORM', role: 'orm', icon: <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M5 6l3 5M9 6l3 5M13 11l3 5M17 11l3 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg> },
+  { name: 'Vercel', role: 'edge', icon: <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 4l9 14H2L11 4z" fill="currentColor" /></svg> },
+  { name: 'Cloudflare', role: 'cdn', icon: <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M16 14c2 0 3-1.5 3-3s-1.5-3-3-3c-.3-2-2-3.5-4-3.5-2.5 0-4.5 2-4.5 4.5 0 .2 0 .4.1.6C5.2 9.8 4 11 4 12.5 4 14.5 5.5 16 7.5 16H16z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" /></svg> },
+  { name: 'Supabase', role: 'baas', icon: <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M13 2L4 13h7l-2 7 9-11h-7l2-7z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" /></svg> }
+];
+
+const TECH_ARR = [TECH[0], TECH[1], TECH[2], TECH[3], TECH[5], TECH[7], TECH[9], TECH[10], TECH[11], TECH[6], TECH[4], TECH[8]];
+
+function TechStack() {
+  return (
+    <section className="section wrap" id="tecnologia">
+      <div className="section-eyebrow-row">
+        <div className="eyebrow">— Stack 2026 —</div>
+      </div>
+      <h2>
+        Stack moderno <span className="gradient">y probado.</span>
+      </h2>
+      <p className="section-sub">
+        Trabajamos con tecnologías de uso comprobado en producción, capaces de escalar y de integrarse con tu ecosistema empresarial.
+      </p>
+
+      <div className="tech-grid">
+        {TECH_ARR.map((t) =>
+          <div key={t.name} className="tech-cell">
+            <div className="icon-box">{t.icon}</div>
+            <div className="name">{t.name}</div>
+            <div className="role">// {t.role}</div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+// ───────── Process ─────────
+const STEPS = [
+  { n: '01', t: 'Visión compartida', d: 'Workshop de discovery donde alineamos objetivos de negocio, métricas de éxito y restricciones técnicas en un brief claro.' },
+  { n: '02', t: 'Diseño con propósito', d: 'Prototipos UX/UI validables y arquitectura definida. Lo que se va a construir queda claro antes de escribir código.' },
+  { n: '03', t: 'Construcción ágil', d: 'Iteraciones cortas con QA automatizado, code review asistido por IA y demos en vivo. Repositorio tuyo desde el día uno.' },
+  { n: '04', t: 'Evolución continua', d: 'Acompañamos el lanzamiento, el monitoreo y las iteraciones siguientes. El software vive y crece contigo.' }
+];
+
+function Process() {
+  return (
+    <section className="section wrap" id="proceso">
+      <div className="section-eyebrow-row">
+        <div className="eyebrow">— Cómo trabajamos —</div>
+      </div>
+      <h2>
+        Cuatro fases. <span className="gradient">Cero sorpresas.</span>
+      </h2>
+      <p className="section-sub">
+        Un proceso transparente diseñado para minimizar la incertidumbre desde la primera reunión hasta el lanzamiento.
+      </p>
+
+      <div className="process">
+        {STEPS.map((s) =>
+          <div key={s.n} className="step">
+            <div className="step-num">{s.n}</div>
+            <h4>{s.t}</h4>
+            <p>{s.d}</p>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+// ───────── Contact ─────────
+const PROJECT_TYPES = [
+  'Aplicación web a medida',
+  'SaaS / plataforma',
+  'Consultoría & arquitectura',
+  'Modernización & integraciones',
+  'Soporte sobre apps existentes',
+  'Otro'
+];
+
+function Contact() {
+  const [form, setForm] = useState({ name: '', email: '', company: '', type: PROJECT_TYPES[0], message: '' });
+  const [sent, setSent] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  const submit = (e) => {
+    e.preventDefault();
+    const errs = {};
+    if (!form.name.trim()) errs.name = true;
+    if (!/^\S+@\S+\.\S+$/.test(form.email)) errs.email = true;
+    if (!form.message.trim()) errs.message = true;
+    setErrors(errs);
+    if (Object.keys(errs).length) return;
+    setSent(true);
+  };
+
+  return (
+    <section className="section wrap" id="contacto" style={{ padding: "120px 0px 40px" }}>
+      <div className="section-eyebrow-row">
+        <div className="eyebrow">— Empieza tu misión —</div>
+      </div>
+      <h2>
+        Cuéntanos en qué<br />
+        <span className="gradient">estás trabajando.</span>
+      </h2>
+      <p className="section-sub">
+        Te escribimos lo antes posible con una propuesta inicial. No spam, no formularios automáticos: te responde directamente alguien del equipo fundador.
+      </p>
+
+      <div className="contact-card card">
+        {sent ?
+          <div className="contact-success">
+            <div className="contact-success-mark"><Icon.check /></div>
+            <h3>Mensaje recibido.</h3>
+            <p>
+              Gracias, <strong style={{ color: 'var(--ink)' }}>{form.name.split(' ')[0]}</strong>. Te escribiremos a <strong style={{ color: 'var(--ink)' }}>{form.email}</strong> lo antes posible.
+            </p>
+            <button className="btn btn-ghost" onClick={() => { setSent(false); setForm({ name: '', email: '', company: '', type: PROJECT_TYPES[0], message: '' }); }}>
+              Enviar otro mensaje
+            </button>
+          </div> :
+          <form className="contact-form" onSubmit={submit} noValidate>
+            <div className="form-row">
+              <label className="form-field">
+                <span className="form-label">Nombre <span className="req">*</span></span>
+                <input type="text" value={form.name} onChange={set('name')} placeholder="Ada Lovelace"
+                  className={errors.name ? 'err' : ''} />
+              </label>
+              <label className="form-field">
+                <span className="form-label">Email <span className="req">*</span></span>
+                <input type="email" value={form.email} onChange={set('email')} placeholder="ada@empresa.com"
+                  className={errors.email ? 'err' : ''} />
+              </label>
+            </div>
+            <div className="form-row">
+              <label className="form-field">
+                <span className="form-label">Empresa</span>
+                <input type="text" value={form.company} onChange={set('company')} placeholder="Opcional" />
+              </label>
+              <label className="form-field">
+                <span className="form-label">Tipo de proyecto</span>
+                <div className="select-wrap">
+                  <select value={form.type} onChange={set('type')}>
+                    {PROJECT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                  <Icon.chev className="select-chev" />
+                </div>
+              </label>
+            </div>
+            <label className="form-field">
+              <span className="form-label">Cuéntanos sobre tu proyecto <span className="req">*</span></span>
+              <textarea rows="5" value={form.message} onChange={set('message')}
+                placeholder="Objetivos, plazos, equipo actual, lo que ya intentaron…"
+                className={errors.message ? 'err' : ''} />
+            </label>
+            <div className="contact-footer">
+              <p className="contact-disclaimer">
+                Al enviar aceptas que un humano (no un bot) lea tu mensaje y te responda por email.
+              </p>
+              <button type="submit" className="btn btn-primary">
+                Enviar mensaje <Icon.arrow />
+              </button>
+            </div>
+          </form>
+        }
+      </div>
+    </section>
+  );
+}
+
+// ───────── Footer ─────────
+function Footer() {
+  return (
+    <footer className="wrap" style={{ padding: "88px 32px 48px" }}>
+      <div className="footer-grid">
+        <div>
+          <div className="footer-brand">
+            <div className="brand-mark" />
+            Andrómeda
+          </div>
+          <p className="footer-desc">
+            Agencia de desarrollo web y consultoría tecnológica potenciada por IA. Equipo remote-first construyendo producto digital desde Latinoamérica.
+          </p>
+        </div>
+        <div className="foot-col">
+          <h5>Servicios</h5>
+          <a>Desarrollo a la medida</a>
+          <a>Consultoría & arquitectura</a>
+          <a>Modernización & integraciones</a>
+          <a>Soporte y evolución</a>
+        </div>
+        <div className="foot-col">
+          <h5>Compañía</h5>
+          <a>Sobre nosotros</a>
+          <a>Manifiesto técnico</a>
+          <a onClick={() => smoothScrollTo('contacto')} style={{ cursor: 'pointer' }}>Contacto</a>
+        </div>
+        <div className="foot-col">
+          <h5>Contacto</h5>
+          <a>hola@andromeda.dev</a>
+          <a>CDMX · Bogotá · Remote</a>
+          <a>LinkedIn ↗</a>
+        </div>
+      </div>
+      <div className="footer-bottom">
+        <div>© 2026 ANDRÓMEDA STUDIO S.A. DE C.V.</div>
+        <div>HECHO ENTRE GALAXIAS · LATAM</div>
+      </div>
+    </footer>
+  );
+}
+
+// ───────── App ─────────
+function AndromedaApp() {
+  useEffect(() => {
+    const root = document.documentElement;
+    root.style.setProperty('--violet', '#a855f7');
+    root.style.setProperty('--violet-2', '#a855f7');
+    root.style.setProperty('--violet-deep', '#6b3fc7');
+    root.style.setProperty('--violet-soft', '#d4b8ff');
+    root.style.setProperty('--glow', '168, 85, 247');
+  }, []);
+
+  return (
+    <div className="shell">
+      <Starfield />
+      <Nav />
+      <Hero />
+      <Services />
+      <AIBoost />
+      <TechStack />
+      <Process />
+      <Contact />
+      <Footer />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<AndromedaApp />);
+</script>
+</body>
+</html>
