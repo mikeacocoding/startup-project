@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nombres para tu empresa</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Syne+Mono&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --purple: #7C3AED;
+    --purple-light: #A855F7;
+    --purple-glow: rgba(124, 58, 237, 0.35);
+    --accent: #C084FC;
+    --bg: #05020F;
+    --text: #F1EBF9;
+    --muted: rgba(241, 235, 249, 0.45);
+  }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Stars background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 40%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 40% 10%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 55% 55%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 20%, rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 80% 70%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 35%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 15% 75%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 35% 85%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 90%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 45% 60%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 75% 45%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 88% 10%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 5% 50%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 20% 30%, rgba(200,180,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 65% 5%, rgba(200,180,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 25%, rgba(255,255,255,0.35) 0%, transparent 100%),
+      radial-gradient(1px 1px at 95% 80%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 30% 55%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 50%, rgba(200,180,255,0.5) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Glow orb top center */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 700px;
+    height: 500px;
+    background: radial-gradient(ellipse at center, rgba(124,58,237,0.22) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 24px 60px;
+  }
+  .hero-title {
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    max-width: 900px;
+    animation: fadeUp 0.9s ease 0.1s both;
+  }
+  .hero-title .accent { color: var(--accent); font-style: italic; }
+  .hero-sub {
+    margin-top: 28px;
+    max-width: 560px;
+    font-size: 1.05rem;
+    font-weight: 400;
+    color: var(--muted);
+    line-height: 1.7;
+    animation: fadeUp 1s ease 0.2s both;
+  }
+  .hero-scroll {
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 13px;
+    animation: fadeUp 1s ease 0.4s both;
+  }
+  .scroll-dot {
+    width: 24px; height: 38px;
+    border: 1.5px solid rgba(160,100,255,0.35);
+    border-radius: 999px;
+    display: flex;
+    justify-content: center;
+    padding-top: 6px;
+  }
+  .scroll-dot::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: scrollBounce 1.6s ease infinite;
+  }
+
+  /* NAMES SECTION */
+  .section {
+    position: relative;
+    z-index: 1;
+    padding: 60px 24px 120px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .section-label {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .section-title {
+    text-align: center;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 60px;
+  }
+
+  .names-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+  }
+
+  .name-card {
+    background: rgba(18, 8, 35, 0.65);
+    border: 0.5px solid rgba(160, 100, 255, 0.18);
+    border-radius: 20px;
+    padding: 28px 28px 24px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.25s, transform 0.25s, background 0.25s;
+    animation: fadeUp 0.7s ease both;
+  }
+  .name-card:hover {
+    border-color: rgba(168, 85, 247, 0.55);
+    background: rgba(30, 10, 55, 0.75);
+    transform: translateY(-4px);
+  }
+  .name-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 140px; height: 140px;
+    background: radial-gradient(circle at top right, var(--purple-glow), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .name-card:hover::before { opacity: 1; }
+
+  .card-number {
+    font-family: 'Syne Mono', monospace;
+    font-size: 11px;
+    color: rgba(160,100,255,0.5);
+    margin-bottom: 14px;
+    letter-spacing: 0.08em;
+  }
+  .card-name {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 4px;
+    background: linear-gradient(135deg, #F1EBF9 40%, #C084FC 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .card-variant {
+    font-size: 13px;
+    color: rgba(160,100,255,0.65);
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .card-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+  }
+  .tag-purple { background: rgba(124,58,237,0.25); color: #C084FC; border: 0.5px solid rgba(192,132,252,0.3); }
+  .tag-teal   { background: rgba(20,184,166,0.18); color: #5EEAD4; border: 0.5px solid rgba(94,234,212,0.25); }
+  .tag-blue   { background: rgba(59,130,246,0.18); color: #93C5FD; border: 0.5px solid rgba(147,197,253,0.25); }
+  .tag-amber  { background: rgba(245,158,11,0.18); color: #FCD34D; border: 0.5px solid rgba(252,211,77,0.25); }
+  .tag-coral  { background: rgba(244,63,94,0.18);  color: #FDA4AF; border: 0.5px solid rgba(253,164,175,0.25); }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 40px 24px;
+    border-top: 0.5px solid rgba(160,100,255,0.15);
+    color: rgba(241,235,249,0.3);
+    font-size: 13px;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollBounce {
+    0%, 100% { transform: translateY(0); opacity: 1; }
+    50%       { transform: translateY(10px); opacity: 0.4; }
+  }
+
+  /* staggered cards */
+  .name-card:nth-child(1)  { animation-delay: 0.05s; }
+  .name-card:nth-child(2)  { animation-delay: 0.10s; }
+  .name-card:nth-child(3)  { animation-delay: 0.15s; }
+  .name-card:nth-child(4)  { animation-delay: 0.20s; }
+  .name-card:nth-child(5)  { animation-delay: 0.25s; }
+  .name-card:nth-child(6)  { animation-delay: 0.30s; }
+  .name-card:nth-child(7)  { animation-delay: 0.35s; }
+  .name-card:nth-child(8)  { animation-delay: 0.40s; }
+  .name-card:nth-child(9)  { animation-delay: 0.45s; }
+  .name-card:nth-child(10) { animation-delay: 0.50s; }
+  .name-card:nth-child(11) { animation-delay: 0.55s; }
+  .name-card:nth-child(12) { animation-delay: 0.60s; }
+
+  @media (max-width: 600px) {
+    .names-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <h1 class="hero-title">
+    Elige el nombre que<br>llevará tu empresa<br>al <span class="accent">universo.</span>
+  </h1>
+  <p class="hero-sub">
+    12 propuestas de nombre con identidad cósmica para tu empresa de software a la medida. Cada uno es inventado, único y con dominio potencialmente libre.
+  </p>
+  <div class="hero-scroll">
+    <div class="scroll-dot"></div>
+    Ver propuestas
+  </div>
+</section>
+
+<!-- NAMES -->
+<section class="section" id="nombres">
+  <p class="section-label">Propuestas de nombre</p>
+  <h2 class="section-title">12 identidades cósmicas</h2>
+
+  <div class="names-grid">
+
+    <div class="name-card">
+      <p class="card-number">01</p>
+      <p class="card-name">Nebulox</p>
+      <p class="card-variant">Nebulox Systems · nebulox.io</p>
+      <p class="card-desc">De <em>nebula</em> (nube interestelar) + sufijo tech <em>-ox</em>. Evoca expansión, creatividad y origen de nuevas estrellas.</p>
+      <div class="card-tags">
+        <span class="tag tag-purple">Inventado</span>
+        <span class="tag tag-teal">Corto</span>
+        <span class="tag tag-blue">Dominio libre</span>
+      </div>
+    </div>
+
+    <div class="name-card">
+      <p class="card-number">02</p>
+      <p class="card-name">Veltara</p>
+      <p class="card-variant">Veltara Labs · veltara.dev</p>
+      <p class="card-desc">Fusión de <em>vela</em> (estrella joven) + <em>-tara</em> (raíz de "estrella" en sánscrito). Suena premium y futurista.</p>
+      <div class="card-tags">
+        <span class="tag tag-purple">Inventado</span>
+        <span class="tag tag-teal">Elegante</span>
+      </div>
+    </div>
+
+    <div class="name-card">
+      <p class="card-number">03</p>
+      <p class="card-name">Quasar</p>
+      <p class="card-variant">Quasar Build · quasardev.io</p>
+      <p class="card-desc">El objeto más luminoso del universo conocido. Potencia y energía máxima. Simple, poderoso y memorable.</p>
+      <div class="card-tags">
+        <span class="tag tag-blue">Real + tech</span>
+        <span class="tag tag-amber">Reconocible</span>
+      </div>
+    </div>
+
+    <div class="name-card">
+      <p class="card-number">04</p>
+      <p class="card-name">Orixa</p>
+      <p class="card-variant">Orixa Code · orixa.io</p>
+      <p class="card-desc">Inspirado en la constelación de <em>Orion</em> con variación fonética. Corto, raro y fácil de escribir en cualquier idioma.</p>
+      <div class="card-tags">
+        <span class="tag tag-purple">Inventado</span>
+        <span class="tag tag-teal">Minimalista</span>
+      </div>
+    </div>
+
+    <div class="name-card">
+      <p class="card-number">05</p>
+      <p class="card-name">Zyphron</p>
+      <p class="card-variant">Zyphron Tech · zyphron.dev</p>
+      <p class="card-desc">De <em>zephyr</em> (viento interestelar) + partícula <em>-on</em>. Sonido sólido y técnico, transmite fuerza y precisión.</p>
+      <div class="card-tags">
+        <span class="tag tag-purple">Inventado</span>
+        <span class="tag tag-coral">Fuerte</span>
+      </div>
+    </div>
+
+    <div class="name-card">
+      <p class="card-number">06</p>
+      <p class="card-name">Lunark</p>
+      <p class="card-variant">Lunark Studio · lunark.io</p>
+      <p class="card-desc">De <em>luna</em> + <em>-ark</em> (arca, origen). La luna como punto de partida hacia algo mayor. Versátil y cercano.</p>
+      <div class="card-tags">
+        <span class="tag tag-purple">Inventado</span>
+        <span class="tag tag-teal">Versátil</span>
+      </div>
+    </div>
+
+    <div class="name-card">
+      <p class="card-number">07</p>
+      <p class="card-name">Exovex</p>
+      <p class="card-variant">Exovex Labs · exovex.dev</p>
+      <p class="card-desc">De <em>exo-</em> (externo, fuera de) + <em>vex</em> (estructura hexagonal). Referencia a exoplanetas y arquitectura de software.</p>
+      <div class="card-tags">
+        <span class="tag tag-purple">Inventado</span>
+        <span class="tag tag-blue">Dinámico</span>
+      </div>
+    </div>
+
+    <div class="name-card">
+      <p class="card-number">08</p>
+      <p class="card-name">Solanis</p>
+      <p class="card-variant">Solanis Dev · solanis.io</p>
+      <p class="card-desc">Derivado de <em>solaris</em> con toque latinoamericano. Cálido, profesional y memorable para clientes de la región.</p>
+      <div class="card-tags">
+        <span class="tag tag-amber">Inventado</span>
+        <span class="tag tag-teal">Sofisticado</span>
+      </div>
+    </div>
+
+    <div class="name-card">
+      <p class="card-number">09</p>
+      <p class="card-name">Kronvex</p>
+      <p class="card-variant">Kronvex Solutions · kronvex.dev</p>
+      <p class="card-desc">De <em>Kronos</em> (Saturno en griego) + <em>vex</em>. Saturno como símbolo de estructura y los anillos como sistemas perfectos.</p>
+      <div class="card-tags">
+        <span class="tag tag-purple">Inventado</span>
+        <span class="tag tag-coral">Técnico</span>
+      </div>
+    </div>
+
+    <div class="name-card">
+      <p class="card-number">10</p>
+      <p class="card-name">Astryd</p>
+      <p class="card-variant">Astryd Code · astryd.io</p>
+      <p class="card-desc">Variación de <em>astro</em> con terminación nórdica. Evoca exploración espacial y precisión técnica en un solo trazo.</p>
+      <div class="card-tags">
+        <span class="tag tag-purple">Inventado</span>
+        <span class="tag tag-teal">Moderno</span>
+      </div>
+    </div>
+
+    <div class="name-card">
+      <p class="card-number">11</p>
+      <p class="card-name">Plerion</p>
+      <p class="card-variant">Plerion Systems · plerion.dev</p>
+      <p class="card-desc">Un <em>plerion</em> es un tipo real de nebulosa, muy poco conocido. Casi con certeza el dominio estará libre. Sonido contundente.</p>
+      <div class="card-tags">
+        <span class="tag tag-purple">Término real</span>
+        <span class="tag tag-blue">Único</span>
+      </div>
+    </div>
+
+    <div class="name-card">
+      <p class="card-number">12</p>
+      <p class="card-name">Velorix</p>
+      <p class="card-variant">Velorix Studio · velorix.io</p>
+      <p class="card-desc">De <em>velocidad</em> + sufijo espacial <em>-orix</em>. Connotación de rapidez, entrega ágil y precisión orbital.</p>
+      <div class="card-tags">
+        <span class="tag tag-purple">Inventado</span>
+        <span class="tag tag-teal">Veloz</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <p>Generado como referencia de identidad de marca · Verifica disponibilidad de dominios en namecheap.com o godaddy.com</p>
+</footer>
+
+</body>
+</html>
